@@ -1,6 +1,6 @@
 package com.nrjd.common.util;
 
-public enum HttpStatusEnum{
+public enum HttpStatusEnum {
     //1xxInformational1xx信息类的
     CONTINUE(100,"Continue"),
     //交换协议
