@@ -8,5 +8,5 @@ import lombok.Setter;
 public class responseBody {
     int code = 0;
     String msg = "";
-    int data = 0;
+    Long data = 0L;
 }

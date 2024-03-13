@@ -11,9 +11,13 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class CommonTestCases extends MainTestCases {
+    protected Map<String, Object> verifyActionResult = new HashMap<>();
+    protected Map<String, Object> verifyCaseResult = new HashMap<>();
     private String token = "";
 
     @BeforeClass
@@ -50,6 +54,16 @@ public class CommonTestCases extends MainTestCases {
 
     @AfterTest
     public void teardown() {
+        if (verifyActionResult != null) {
+            LogUtil.info("teardown: clear verifyActionResult data!!");
+            verifyActionResult.clear();
+        }
+
+        if (verifyCaseResult != null) {
+            LogUtil.info("teardown: clear verifyCaseResult data!!");
+            verifyCaseResult.clear();
+        }
+
         try {
             if (DBUtil.getInstance().getConnection() != null) {
                 DBUtil.getInstance().getConnection().close();

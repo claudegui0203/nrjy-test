@@ -7,7 +7,8 @@ public enum InterfaceEnum {
     SAMPLELIBRARYBD("/statistics/sampleLibraryBd"),
     DELETESAMPLEMAIN("/api/sample/sampleView/deleteSampleMain"),
     DELETEUPLOAD("/api/sample/sampleView/deleteUpload"),
-    REGISTER("/api/user/register");
+    REGISTER("/api/user/register"),
+    DELETEUSER("/api/user/del");
 
 
     private InterfaceEnum(String api) {

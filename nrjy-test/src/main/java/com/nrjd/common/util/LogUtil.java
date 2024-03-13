@@ -14,19 +14,15 @@ public class LogUtil {
         if (! file.exists()) {
             file =  new File("log4j.properties");
         }
-        System.out.println("getLogConfiguration::log4j.properties file is under " + file.getPath() + " field.");
     }
     public static void startTestCase(String sTestCaseName) {
         Logger.info("Begin test case " + sTestCaseName + " running...");
     }
 
-    //这个方法没有调用成功我也不知道是为什么？
-    // 用例执行结束后日志输出
     public static void endTestCase(String sTestCaseName) {
         Logger.info("End test case " + sTestCaseName + " running...");
     }
 
-    // 以下是不同日志级别的方法，方便需要的时候调用，一般info和error用得最多
     public static void info (String message) {
         if (file == null) {
             getLogConfiguration();

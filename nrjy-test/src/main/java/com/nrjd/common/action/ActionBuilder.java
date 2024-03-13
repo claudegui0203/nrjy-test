@@ -14,8 +14,8 @@ public class ActionBuilder<T> {
 
     /**
      * Need build action parameter for building action, this parameter is to select a correct action parameter builder, can get parameter builder from:
-     * <code>ActionParameterBuilderMap4Meeting</code>
-     * @param actionParameterBuilder ActionParameterBuilderMap4Meeting.xxxx
+     * <code>ActionParameterBuilderMap4Http</code>
+     * @param actionParameterBuilder ActionParameterBuilderMap4Http.xxxx
      * @return
      */
     public static <T> T createActionParameterBuilder(Class<T> actionParameterBuilder) {
@@ -25,7 +25,7 @@ public class ActionBuilder<T> {
     @SuppressWarnings("unchecked")
     private T createActionParameterBuilder() {
         ActionBuilderProxy jdkProxy = new ActionBuilderProxy(actionParameterBuilder);
-        return (T) Proxy.newProxyInstance(actionParameterBuilder.getClassLoader(),
+        return (T)Proxy.newProxyInstance(actionParameterBuilder.getClassLoader(),
                 new Class[]{actionParameterBuilder},
                 jdkProxy);
     }

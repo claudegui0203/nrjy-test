@@ -1,23 +1,25 @@
 package com.nrjd.intelligence.interfacetest.user;
 
+import com.nrjd.common.action.*;
 import com.nrjd.common.util.*;
 import com.nrjd.intelligence.business.body.InterfaceEnum;
+import com.nrjd.intelligence.business.body.del;
 import com.nrjd.intelligence.business.body.register;
 import com.nrjd.intelligence.business.response.responseBody;
 import com.nrjd.intelligence.interfacetest.CommonTestCases;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class registerNewUser extends CommonTestCases {
+    private List<Long> userIds = new ArrayList<>();
 
-    @Test
-    public void registerUser() throws SQLException, NoSuchFieldException, IllegalAccessException {
+    @Test(priority=1)
+    public void registerUser() throws SQLException, NoSuchFieldException, IllegalAccessException, InterruptedException {
         String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.REGISTER.getApi();
 
         register register = new register();
@@ -32,20 +34,282 @@ public class registerNewUser extends CommonTestCases {
         register.setPassword(generateString());
         register.setCompany(generateString());
         register.setRealName(generateString());
-        register.setPhone("13956055180");
+        register.setPhone(generatePhoneNumber());
         register.setRoleIds(roleIds);
         register.setRoleNames(roleNames);
         register.setIsDisplay("0");
 
-        LogUtil.info("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(register));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(register), generateHeaders());
-        LogUtil.info("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        verifyActionResult.put("code", 200);
 
-        verifyHttpResponseBodyUtil.getInstance().verifyField(new responseBody(), httpResponse.getResponseBody(), "code", 202);
+        ActionSendHttpRequest actionSendHttpRequest = ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(register)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .buildAction();
+        actionSendHttpRequest.perform();
+
+        String httpResponseBody = (String) actionSendHttpRequest.getResult("responseBody");
+        responseBody responseBody = JsonUtil.getGson().fromJson(httpResponseBody, responseBody.class);
+        userIds.add(responseBody.getData());
+
+        verifyCaseResult.put("id", userIds.get(0));
+        verifyCaseResult.put("username", register.getUsername());
+        verifyCaseResult.put("phone", register.getPhone());
+        verifyCaseResult.put("role_name", register.getRoleNames().get(0));
+        verifyCaseResult.put("company", register.getCompany());
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_QUERY_DB_REQUEST)
+                .paramTableName("tb_sys_user")
+                .expectedIsResultExist(true).expectedField(verifyCaseResult)
+                .buildAction()
+                .perform();
+    }
+
+    @Test(priority=1)
+    public void usernameIsNull() throws SQLException, NoSuchFieldException, IllegalAccessException, InterruptedException {
+        String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.REGISTER.getApi();
+
+        register register = new register();
+        List<String> roleNames = new ArrayList<>();
+        List<Integer> roleIds = new ArrayList<>();
+
+        roleNames.add("sadmin");
+        roleIds.add(queryIdByUsername("sadmin"));
+
+        register.setUsername(null);
+        register.setPassword(generateString());
+        register.setCompany(generateString());
+        register.setRealName(generateString());
+        register.setPhone(generatePhoneNumber());
+        register.setRoleIds(roleIds);
+        register.setRoleNames(roleNames);
+        register.setIsDisplay("0");
+
+        verifyActionResult.put("code", 400);
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(register)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .buildAction()
+                .perform();
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_QUERY_DB_REQUEST)
+                .paramTableName("tb_sys_user")
+                .expectedIsResultExist(false).expectedField(verifyCaseResult)
+                .buildAction()
+                .perform();
+    }
+
+    @Test(priority=1)
+    public void passwordIsNull() throws SQLException, NoSuchFieldException, IllegalAccessException, InterruptedException {
+        String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.REGISTER.getApi();
+
+        register register = new register();
+        List<String> roleNames = new ArrayList<>();
+        List<Integer> roleIds = new ArrayList<>();
+
+        roleNames.add("sadmin");
+        roleIds.add(queryIdByUsername("sadmin"));
+
+        String username = usernameWithoutDuplication();
+        register.setUsername(username);
+        register.setPassword(null);
+        register.setCompany(generateString());
+        register.setRealName(generateString());
+        register.setPhone(generatePhoneNumber());
+        register.setRoleIds(roleIds);
+        register.setRoleNames(roleNames);
+        register.setIsDisplay("0");
+
+        verifyActionResult.put("code", 400);
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(register)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .buildAction()
+                .perform();
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_QUERY_DB_REQUEST)
+                .paramTableName("tb_sys_user")
+                .expectedIsResultExist(false).expectedField(verifyCaseResult)
+                .buildAction()
+                .perform();
+    }
+
+    @Test(priority=1)
+    public void companyIsNull() throws SQLException, NoSuchFieldException, IllegalAccessException, InterruptedException {
+        String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.REGISTER.getApi();
+
+        register register = new register();
+        List<String> roleNames = new ArrayList<>();
+        List<Integer> roleIds = new ArrayList<>();
+
+        roleNames.add("sadmin");
+        roleIds.add(queryIdByUsername("sadmin"));
+
+        String username = usernameWithoutDuplication();
+        register.setUsername(username);
+        register.setPassword(generateString());
+        register.setCompany(null);
+        register.setRealName(generateString());
+        register.setPhone(generatePhoneNumber());
+        register.setRoleIds(roleIds);
+        register.setRoleNames(roleNames);
+        register.setIsDisplay("0");
+
+        verifyActionResult.put("code", 200);
+
+        ActionSendHttpRequest actionSendHttpRequest = ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(register)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .buildAction();
+        actionSendHttpRequest.perform();
+
+        String httpResponseBody = (String) actionSendHttpRequest.getResult("responseBody");
+        responseBody responseBody = JsonUtil.getGson().fromJson(httpResponseBody, responseBody.class);
+        userIds.add(responseBody.getData());
+
+        verifyCaseResult.put("id", userIds.get(0));
+        verifyCaseResult.put("username", register.getUsername());
+        verifyCaseResult.put("phone", register.getPhone());
+        verifyCaseResult.put("role_name", register.getRoleNames().get(0));
+        verifyCaseResult.put("company", register.getCompany());
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_QUERY_DB_REQUEST)
+                .paramTableName("tb_sys_user")
+                .expectedIsResultExist(true).expectedField(verifyCaseResult)
+                .buildAction()
+                .perform();
+    }
+
+    @Test(priority=1)
+    public void realNameIsNull() throws SQLException, NoSuchFieldException, IllegalAccessException, InterruptedException {
+        String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.REGISTER.getApi();
+
+        register register = new register();
+        List<String> roleNames = new ArrayList<>();
+        List<Integer> roleIds = new ArrayList<>();
+
+        roleNames.add("sadmin");
+        roleIds.add(queryIdByUsername("sadmin"));
+
+        String username = usernameWithoutDuplication();
+        register.setUsername(username);
+        register.setPassword(generateString());
+        register.setCompany(generateString());
+        register.setRealName(null);
+        register.setPhone(generatePhoneNumber());
+        register.setRoleIds(roleIds);
+        register.setRoleNames(roleNames);
+        register.setIsDisplay("0");
+
+        verifyActionResult.put("code", 200);
+
+        ActionSendHttpRequest actionSendHttpRequest = ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(register)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .buildAction();
+        actionSendHttpRequest.perform();
+
+        String httpResponseBody = (String) actionSendHttpRequest.getResult("responseBody");
+        responseBody responseBody = JsonUtil.getGson().fromJson(httpResponseBody, responseBody.class);
+        userIds.add(responseBody.getData());
+
+        verifyCaseResult.put("id", userIds.get(0));
+        verifyCaseResult.put("username", register.getUsername());
+        verifyCaseResult.put("phone", register.getPhone());
+        verifyCaseResult.put("role_name", register.getRoleNames().get(0));
+        verifyCaseResult.put("company", register.getCompany());
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_QUERY_DB_REQUEST)
+                .paramTableName("tb_sys_user")
+                .expectedIsResultExist(true).expectedField(verifyCaseResult)
+                .buildAction()
+                .perform();
+    }
+
+    @Test(priority=1)
+    public void realNameIsEmpty() throws SQLException {
+        String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.REGISTER.getApi();
+
+        register register = new register();
+        List<String> roleNames = new ArrayList<>();
+        List<Integer> roleIds = new ArrayList<>();
+
+        roleNames.add("sadmin");
+        roleIds.add(queryIdByUsername("sadmin"));
+
+        register.setUsername("");
+        register.setPassword(generateString());
+        register.setCompany(generateString());
+        register.setRealName(generateString());
+        register.setPhone(generatePhoneNumber());
+        register.setRoleIds(roleIds);
+        register.setRoleNames(roleNames);
+        register.setIsDisplay("0");
+
+        verifyActionResult.put("code", 200);
+
+        ActionSendHttpRequest actionSendHttpRequest = ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(register)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .buildAction();
+        actionSendHttpRequest.perform();
+
+        String httpResponseBody = (String) actionSendHttpRequest.getResult("responseBody");
+        responseBody responseBody = JsonUtil.getGson().fromJson(httpResponseBody, responseBody.class);
+        userIds.add(responseBody.getData());
+
+        verifyCaseResult.put("id", userIds.get(0));
+        verifyCaseResult.put("username", register.getUsername());
+        verifyCaseResult.put("phone", register.getPhone());
+        verifyCaseResult.put("role_name", register.getRoleNames().get(0));
+        verifyCaseResult.put("company", register.getCompany());
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_QUERY_DB_REQUEST)
+                .paramTableName("tb_sys_user")
+                .expectedIsResultExist(true).expectedField(verifyCaseResult)
+                .buildAction()
+                .perform();
+    }
 
 
 
+    @Test(priority=2)
+    public void deleteUser() {
+        String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.DELETEUSER.getApi();
+
+        del del = new del();
+        del.setIds(userIds);
+
+        verifyActionResult.put("code", 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.DELETE).paramRequestHeader(generateHeaders()).paramRequestBody(del)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .buildAction()
+                .perform();
+
+        AtomicReference<String> sql = new AtomicReference<>("SELECT * FROM tb_sys_user WHERE ");
+        AtomicBoolean isFirst = new AtomicBoolean(true);
+        userIds.forEach(userId -> {
+            isFirst.set(false);
+            sql.set(mergeQuerySql(sql.get(), userId, isFirst.get()));
+            verifyCaseResult.put("id", userId);});
+
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_QUERY_DB_REQUEST)
+                .paramSql(String.valueOf(sql))
+                .expectedIsResultExist(false).expectedField(verifyCaseResult)
+                .buildAction()
+                .perform();
+    }
+
+    private String mergeQuerySql(String sql, Long userId, boolean isFirst) {
+        if (! isFirst) {
+            sql = sql + "id=" + userId;
+        } else {
+            sql = sql + " OR id=" + userId;
+        }
+
+        return sql;
     }
 
     private int queryIdByUsername(String username) throws SQLException {
@@ -58,6 +322,7 @@ public class registerNewUser extends CommonTestCases {
             }
         }
 
+        resultSet.close();
         return id;
     }
 
@@ -88,6 +353,18 @@ public class registerNewUser extends CommonTestCases {
         }
 
         return username.toString();
+    }
+
+    private String generatePhoneNumber() {
+        String str = "0123456789";
+        Random random = new Random();
+        StringBuffer phoneNumber = new StringBuffer();
+        for (int i=0; i < random.nextInt(11); i++){
+            int number=random.nextInt(10);
+            phoneNumber.append(str.charAt(number));
+        }
+
+        return phoneNumber.toString();
     }
 
     private String usernameWithoutDuplication() throws SQLException {

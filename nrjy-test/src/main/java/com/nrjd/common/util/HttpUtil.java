@@ -3,10 +3,7 @@ package com.nrjd.common.util;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.methods.*;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -22,8 +19,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.util.MultiValueMap;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -83,23 +83,50 @@ public class HttpUtil {
         return httpResponse;
     }
 
-//    public static Response uploadFile (String url, File file, Header[] headers) throws IOException {
-//        OkHttpClient client = new OkHttpClient().newBuilder()
-//                .build();
-//        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-//        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-//                .addFormDataPart("picPath","upload_pic/220kV金家岭变电站/2023/12/11/20231211_143912_/profile_jydw_upload/capturepicpath/2023-12-11/example.jpg")
-//                .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file))
-//                .build();
-//        Request request = new Request.Builder()
-//                .url("http://10.139.11.108:10013/api/uploadImage")
-//                .method("POST", body)
-//                .addHeader("token", "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6OCwidXNlcm5hbWUiOiJzYWRtaW4iLCJleHAiOjE3MDY4Njk1NDh9.bQvHHXM0leaAz7UUTqc-ozl4reGxx2n7FIU5uomtDvGsBY-efA3JIo60CPkBI9jdBHRflLTD6Pys2_PaozA5DBuC7q10ir11yIoTh0d7SJwxtaT7AiJ3aQfm95YIgM8a202BaSrHuVbsXmxQZRF4xLV8G0HymvUzFLUeQlhmoes")
-//                .addHeader("Content-Type", "application/json; charset=utf-8")
-//                .build();
-//        Response response = client.newCall(request).execute();
-//        return response;
-//    }
+    /**
+     *
+     * Add the POST method
+     * @param url
+     * @param deleteBody
+     * @param headers
+     *
+     */
+    public static HttpResponse delete (String url, String deleteBody, Header[] headers) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod("DELETE");
+
+        connection.setDoOutput(true);
+        if (headers != null) {
+            for (Header header : headers) {
+                connection.setRequestProperty(header.getName(), header.getValue());
+            }
+        }
+
+        try (var outputStream = connection.getOutputStream()) {
+            byte[] inputBytes = deleteBody.getBytes(StandardCharsets.UTF_8);
+            outputStream.write(inputBytes, 0, inputBytes.length);
+        }
+
+        int responseCode = connection.getResponseCode();
+        BufferedReader reader = null;
+
+        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        } else {
+            reader = new BufferedReader(new InputStreamReader((connection.getErrorStream())));
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+
+        connection.disconnect();
+        reader.close();
+        return new HttpResponse(responseCode, stringBuilder.toString());
+    }
 
     public static CloseableHttpResponse postUploadFile(String url, File file, Map<String, String> parameters, Header[] headers) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -232,13 +259,27 @@ public class HttpUtil {
                 reader = new BufferedReader(new InputStreamReader(
                         httpMethod.getResponseBodyAsStream(), httpMethod.getResponseCharSet()));
                 StringBuffer strBuffer = new StringBuffer();
-                int tmpAscII = reader.read();
-                while (tmpAscII != -1) {
-                    char tmpChar = (char) tmpAscII;
-                    strBuffer.append(tmpChar);
-                    tmpAscII = reader.read();
+
+
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
                 }
-                content = strBuffer.toString();
+
+
+
+
+
+
+//                int tmpAscII = reader.read();
+//                while (tmpAscII != -1) {
+//                    char tmpChar = (char) tmpAscII;
+//                    strBuffer.append(tmpChar);
+//                    tmpAscII = reader.read();
+//                }
+                content = stringBuilder.toString();
                 reader.close();
             }
         } finally {
