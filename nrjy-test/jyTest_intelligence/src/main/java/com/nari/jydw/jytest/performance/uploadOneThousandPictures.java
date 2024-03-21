@@ -1,10 +1,10 @@
 package com.nari.jydw.jytest.performance;
 
-import com.nrjd.common.util.HttpUtil;
-import com.nrjd.common.util.JsonUtil;
-import com.nrjd.common.util.LogUtil;
-import com.nrjd.common.util.MqttUtil;
-import com.nrjd.intelligence.business.body.alertPic;
+import com.nari.jydw.jytest.common.business.body.alertPic;
+import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
+import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
+import com.nari.jydw.jytest.interfaceTest.utils.LogUtil;
+import com.nari.jydw.jytest.interfaceTest.utils.MqttUtil;
 import com.nrjd.intelligence.interfacetest.CommonTestCases;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;

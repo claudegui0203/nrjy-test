@@ -1,7 +1,7 @@
 package com.nari.jydw.jytest.interfacetest.samplemanagement;
 
+import com.nari.jydw.jytest.common.InterfaceEnum;
 import com.nrjd.common.util.TestParametersUtil;
-import com.nrjd.intelligence.business.body.InterfaceEnum;
 import com.nrjd.intelligence.interfacetest.CommonTestCases;
 import org.testng.annotations.Test;
 

@@ -1,12 +1,13 @@
 package com.nari.jydw.jytest.interfacetest.deletesample;
 
-import com.nrjd.common.util.HttpResponse;
-import com.nrjd.common.util.HttpUtil;
-import com.nrjd.common.util.JsonUtil;
-import com.nrjd.common.util.TestParametersUtil;
-import com.nrjd.intelligence.business.body.InterfaceEnum;
-import com.nrjd.intelligence.business.body.deleteSampleMain;
-import com.nrjd.intelligence.interfacetest.CommonTestCases;
+
+import com.nari.jydw.jytest.CommonTestCases;
+import com.nari.jydw.jytest.common.HttpResponse;
+import com.nari.jydw.jytest.common.TestParametersUtil;
+import com.nari.jydw.jytest.common.InterfaceEnum;
+import com.nari.jydw.jytest.common.business.body.deleteSampleMain;
+import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
+import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

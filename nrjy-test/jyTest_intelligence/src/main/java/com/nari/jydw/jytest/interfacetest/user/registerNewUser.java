@@ -2,7 +2,7 @@ package com.nari.jydw.jytest.interfacetest.user;
 
 import com.nari.jydw.jytest.CommonTestCases;
 import com.nari.jydw.jytest.common.HttpStatusEnum;
-import com.nari.jydw.jytest.common.business.body.InterfaceEnum;
+import com.nari.jydw.jytest.common.InterfaceEnum;
 import com.nari.jydw.jytest.common.business.body.del;
 import com.nari.jydw.jytest.common.business.body.register;
 import com.nari.jydw.jytest.common.business.response.responseBody;

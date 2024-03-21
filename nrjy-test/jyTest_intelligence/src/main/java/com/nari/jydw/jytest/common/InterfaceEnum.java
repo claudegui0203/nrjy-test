@@ -1,4 +1,4 @@
-package com.nari.jydw.jytest.common.business.body;
+package com.nari.jydw.jytest.common;
 
 public enum InterfaceEnum {
 
@@ -8,6 +8,7 @@ public enum InterfaceEnum {
     DELETESAMPLEMAIN("/api/sample/sampleView/deleteSampleMain"),
     DELETEUPLOAD("/api/sample/sampleView/deleteUpload"),
     REGISTER("/api/user/register"),
+    UPDATEUSER("/api/user/update"),
     DELETEUSER("/api/user/del");
 
 

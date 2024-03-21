@@ -1,6 +1,7 @@
 package com.nari.jydw.jytest.common.business.body;
 
-import com.nrjd.common.util.JsonUtil;
+
+import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import lombok.Getter;
 import lombok.Setter;
 

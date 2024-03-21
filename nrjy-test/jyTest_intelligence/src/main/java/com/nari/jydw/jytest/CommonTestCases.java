@@ -3,7 +3,7 @@ package com.nari.jydw.jytest;
 import com.nari.jydw.jytest.common.HttpResponse;
 import com.nari.jydw.jytest.common.MainTestCases;
 import com.nari.jydw.jytest.common.TestParametersUtil;
-import com.nari.jydw.jytest.common.business.body.InterfaceEnum;
+import com.nari.jydw.jytest.common.InterfaceEnum;
 import com.nari.jydw.jytest.common.business.body.loginResponse;
 import com.nari.jydw.jytest.interfaceTest.utils.*;
 import org.apache.commons.httpclient.Header;
