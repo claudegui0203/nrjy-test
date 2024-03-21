@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.nari.jydw.jytest</groupId>
     <artifactId>nrjy-test</artifactId>
     <version>1.0</version>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -14,6 +15,12 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+
+    <modules>
+        <module>jyTest_common</module>
+        <module>jyTest_intelligence</module>
+        <module>jyTest_transmission</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -207,7 +214,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src/test/resources</directory>
+                <directory>jyTest_intelligence/src/test/resources</directory>
                 <includes>
                     <include>**/*.xml</include>
                 </includes>

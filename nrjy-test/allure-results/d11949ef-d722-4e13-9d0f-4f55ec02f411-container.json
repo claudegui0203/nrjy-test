@@ -1,1 +1,0 @@
-{"uuid":"d11949ef-d722-4e13-9d0f-4f55ec02f411","name":"nrjy-test","children":["dba73b3c-314d-47c7-a0f8-4c4cdaba660a"],"befores":[],"afters":[{"name":"teardown","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1708412628563,"stop":1708412628945}],"start":1708412627689,"stop":1708412628945}
