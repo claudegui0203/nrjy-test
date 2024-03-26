@@ -1,11 +1,11 @@
 package com.nari.jydw.jytest.performance;
 
+import com.nari.jydw.jytest.CommonTestCases;
 import com.nari.jydw.jytest.common.business.body.alertPic;
 import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.LogUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.MqttUtil;
-import com.nrjd.intelligence.interfacetest.CommonTestCases;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;

@@ -98,10 +98,10 @@ public class HttpUtil {
             }
         }
 
-        try (var outputStream = connection.getOutputStream()) {
-            byte[] inputBytes = deleteBody.getBytes(StandardCharsets.UTF_8);
-            outputStream.write(inputBytes, 0, inputBytes.length);
-        }
+//        try (var outputStream = connection.getOutputStream()) {
+//            byte[] inputBytes = deleteBody.getBytes(StandardCharsets.UTF_8);
+//            outputStream.write(inputBytes, 0, inputBytes.length);
+//        }
 
         int responseCode = connection.getResponseCode();
         BufferedReader reader = null;
