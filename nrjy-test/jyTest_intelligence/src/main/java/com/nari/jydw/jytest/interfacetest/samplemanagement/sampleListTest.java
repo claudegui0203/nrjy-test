@@ -1,5 +1,6 @@
 package com.nari.jydw.jytest.interfacetest.samplemanagement;
 
+import com.nari.jydw.jytest.CommonTestCases;
 import com.nari.jydw.jytest.common.HttpResponse;
 import com.nari.jydw.jytest.common.InterfaceEnum;
 import com.nari.jydw.jytest.common.TestParametersUtil;
@@ -7,7 +8,6 @@ import com.nari.jydw.jytest.common.business.body.sampleList;
 import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.LogUtil;
-import com.nrjd.intelligence.interfacetest.CommonTestCases;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.util.ArrayList;
