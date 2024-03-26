@@ -68,6 +68,8 @@ public class ActionQueryDBRequest extends AbstractTestAction {
             sql = sql + key + "=" + expectedValue;
         } else if (value instanceof Long expectedValue) {
             sql = sql + key + "=" + expectedValue;
+        } else {
+            sql = sql + key +  "=" + value.toString();
         }
 
         return sql;
