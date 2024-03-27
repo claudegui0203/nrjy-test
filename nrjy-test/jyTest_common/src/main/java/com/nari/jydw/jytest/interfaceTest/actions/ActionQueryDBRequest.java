@@ -61,16 +61,18 @@ public class ActionQueryDBRequest extends AbstractTestAction {
             sql = sql + " AND ";
         }
 
-//        if (value instanceof String expectedValue) {
-//            sql = sql + key + "=\"" + expectedValue + "\"";
-//        } else if (value instanceof Integer) {
-//            int expectedValue = (int) value;
-//            sql = sql + key + "=" + expectedValue;
-//        } else if (value instanceof Long expectedValue) {
-//            sql = sql + key + "=" + expectedValue;
-//        } else {
-//            sql = sql + key +  "=" + value.toString();
-//        }
+        if (value instanceof String) {
+            String expectedValue = (String) value;
+            sql = sql + key + "=\"" + expectedValue + "\"";
+        } else if (value instanceof Integer) {
+            int expectedValue = (int) value;
+            sql = sql + key + "=" + expectedValue;
+        } else if (value instanceof Long) {
+            Long expectedValue = (Long) value;
+            sql = sql + key + "=" + expectedValue;
+        } else {
+            sql = sql + key +  "=" + value.toString();
+        }
 
         return sql;
     }

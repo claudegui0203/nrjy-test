@@ -1,6 +1,7 @@
 package com.nari.jydw.jytest.interfaceTest.utils;
 
 import com.nari.jydw.jytest.common.HttpResponse;
+import lombok.var;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
@@ -98,10 +99,10 @@ public class HttpUtil {
             }
         }
 
-//        try (var outputStream = connection.getOutputStream()) {
-//            byte[] inputBytes = deleteBody.getBytes(StandardCharsets.UTF_8);
-//            outputStream.write(inputBytes, 0, inputBytes.length);
-//        }
+        try (var outputStream = connection.getOutputStream()) {
+            byte[] inputBytes = deleteBody.getBytes(StandardCharsets.UTF_8);
+            outputStream.write(inputBytes, 0, inputBytes.length);
+        }
 
         int responseCode = connection.getResponseCode();
         BufferedReader reader = null;
