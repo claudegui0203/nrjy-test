@@ -1,21 +1,19 @@
 package com.nari.jydw.jytest.interfacetest.deletesample;
 
-
 import com.nari.jydw.jytest.CommonTestCases;
-import com.nari.jydw.jytest.common.HttpResponse;
-import com.nari.jydw.jytest.common.TestParametersUtil;
+import com.nari.jydw.jytest.common.HttpStatusEnum;
 import com.nari.jydw.jytest.common.InterfaceEnum;
 import com.nari.jydw.jytest.common.business.body.deleteSampleMain;
-import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
-import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
-import org.testng.Assert;
+import com.nari.jydw.jytest.common.business.response.responseBody;
+import com.nari.jydw.jytest.interfaceTest.actions.ActionBuilder;
+import com.nari.jydw.jytest.interfaceTest.actions.ActionHttpEnum;
+import com.nari.jydw.jytest.interfaceTest.actions.ActionParameterBuilderMap4Http;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class deleteSampleMainTest extends CommonTestCases {
-    private String testUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.DELETESAMPLEMAIN.getApi();
 
     @Test
     public void deleteOneSample() {
@@ -26,10 +24,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(65535);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -43,10 +42,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(1);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -59,10 +59,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(1);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -75,10 +76,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(1);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -90,10 +92,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(3);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -122,10 +125,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(1);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -137,10 +141,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(65535);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -152,10 +157,11 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(1);
         deleteSampleMain.setSampleIdList(sampleIdList);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 
     @Test
@@ -164,9 +170,10 @@ public class deleteSampleMainTest extends CommonTestCases {
         deleteSampleMain.setSysType(1);
         deleteSampleMain.setSampleIdList(null);
 
-        System.out.println("url = " + testUrl + ", body = " + JsonUtil.getGson().toJson(deleteSampleMain));
-        HttpResponse httpResponse = HttpUtil.post(testUrl, JsonUtil.getGson().toJson(deleteSampleMain), generateHeaders());
-        System.out.println("code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody());
-//        Assert.assertEquals(httpResponse.getStatusCode(), 200);
+        ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
+                .paramRequestUrl(InterfaceEnum.DELETESAMPLEMAIN.getApi()).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(deleteSampleMain)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody())
+                .buildAction()
+                .perform();
     }
 }
