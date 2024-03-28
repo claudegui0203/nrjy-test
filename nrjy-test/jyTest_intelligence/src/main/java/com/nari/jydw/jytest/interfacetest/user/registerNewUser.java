@@ -244,6 +244,8 @@ public class registerNewUser extends CommonTestCases {
 
     @Test(priority=2)
     public void deleteUser() {
+        userIds.add(13L);
+
         del del = new del();
         del.setIds(userIds);
 

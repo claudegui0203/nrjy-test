@@ -41,23 +41,10 @@ public class ActionSendHttpRequest extends AbstractTestAction {
     @Override
     protected void sendRequest() {
         LogUtil.info("ActionSendHttpRequest: Test url = " + this.paramRequestUrl + ". Header = " + paramRequestHeader.toString() + " and Request body = " + paramBody);
-        switch (this.paramHttpProtocol) {
-            case POST:
-                httpResponse = HttpUtil.post(paramRequestUrl, paramBody, paramRequestHeader);
-                break;
-            case GET:
-                httpResponse = HttpUtil.get(paramRequestUrl, paramBody, paramRequestHeader);
-                break;
-            case PUT:
-                httpResponse = HttpUtil.put(paramRequestUrl, paramBody, paramRequestHeader);
-                break;
-            case DELETE:
-                try {
-                    httpResponse = HttpUtil.delete(paramRequestUrl, paramBody, paramRequestHeader);
-                } catch (IOException e) {
-                    LogUtil.error("sendRequest: Send delete request fail. Reason = " + e.getMessage());
-                }
-                break;
+        try {
+            httpResponse = HttpUtil.sendHttpRequest(this.paramHttpProtocol, paramRequestUrl, paramBody, paramRequestHeader);
+        } catch (IOException e) {
+            LogUtil.error("sendRequest: Send delete request fail. Reason = " + e.getMessage());
         }
 
         actionResult.put("statusCode", httpResponse.getStatusCode());
@@ -91,7 +78,7 @@ public class ActionSendHttpRequest extends AbstractTestAction {
                 System.out.println(enumConst.toString());
             }
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LogUtil.error("getApiActionType: Cannot find the class. Reason = " + e.getMessage());
         }
     }
 }

@@ -5,6 +5,7 @@ import com.nari.jydw.jytest.common.MainTestCases;
 import com.nari.jydw.jytest.common.TestParametersUtil;
 import com.nari.jydw.jytest.common.InterfaceEnum;
 import com.nari.jydw.jytest.common.business.body.loginResponse;
+import com.nari.jydw.jytest.interfaceTest.actions.ActionHttpEnum;
 import com.nari.jydw.jytest.interfaceTest.utils.*;
 import org.apache.commons.httpclient.Header;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -36,7 +37,12 @@ public class CommonTestCases extends MainTestCases {
     public void getToken() {
         String tokenUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.LOGIN.getApi() + "?username=" + TestParametersUtil.getInstance().getTestParameters().getSiteUsername() + "&password=" + TestParametersUtil.getInstance().getTestParameters().getSitePassword();
         Header header = new Header("Content-Type", "application/json");
-        HttpResponse httpResponse = HttpUtil.post(tokenUrl, "", new Header[] { header });
+        HttpResponse httpResponse = null;
+        try {
+            httpResponse = HttpUtil.sendHttpRequest(ActionHttpEnum.POST, tokenUrl, "", new Header[] { header });
+        } catch (IOException e) {
+            LogUtil.error("getToken: Send delete request fail. Reason = " + e.getMessage());
+        }
 
         for (int i = 0; i < 3; i++) {
             token = JsonUtil.getGson().fromJson(httpResponse.getResponseBody(), loginResponse.class).getToken();

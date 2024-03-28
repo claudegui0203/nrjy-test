@@ -1,7 +1,7 @@
 package com.nari.jydw.jytest.interfaceTest.utils;
 
 import com.nari.jydw.jytest.common.HttpResponse;
-import lombok.var;
+import com.nari.jydw.jytest.interfaceTest.actions.ActionHttpEnum;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
@@ -82,15 +82,15 @@ public class HttpUtil {
 
     /**
      *
-     * Add the POST method
+     * Add the DELETE method
      * @param url
      * @param deleteBody
      * @param headers
      *
      */
-    public static HttpResponse delete (String url, String deleteBody, Header[] headers) throws IOException {
+    public static HttpResponse sendHttpRequest (ActionHttpEnum actionType, String url, String deleteBody, Header[] headers) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.setRequestMethod("DELETE");
+        connection.setRequestMethod(actionType.toString());
 
         connection.setDoOutput(true);
         if (headers != null) {
@@ -99,13 +99,12 @@ public class HttpUtil {
             }
         }
 
-        try (var outputStream = connection.getOutputStream()) {
-            byte[] inputBytes = deleteBody.getBytes(StandardCharsets.UTF_8);
-            outputStream.write(inputBytes, 0, inputBytes.length);
-        }
+        OutputStream outputStream = connection.getOutputStream();
+        byte[] inputBytes = deleteBody.getBytes(StandardCharsets.UTF_8);
+        outputStream.write(inputBytes, 0, inputBytes.length);
 
         int responseCode = connection.getResponseCode();
-        BufferedReader reader = null;
+        BufferedReader reader;
 
         if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -257,7 +256,6 @@ public class HttpUtil {
                         httpMethod.getResponseBodyAsStream(), httpMethod.getResponseCharSet()));
                 StringBuffer strBuffer = new StringBuffer();
 
-
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
 
@@ -265,17 +263,6 @@ public class HttpUtil {
                     stringBuilder.append(line);
                 }
 
-
-
-
-
-
-//                int tmpAscII = reader.read();
-//                while (tmpAscII != -1) {
-//                    char tmpChar = (char) tmpAscII;
-//                    strBuffer.append(tmpChar);
-//                    tmpAscII = reader.read();
-//                }
                 content = stringBuilder.toString();
                 reader.close();
             }
@@ -288,6 +275,10 @@ public class HttpUtil {
         return content;
     }
 
+    private void getResponseBody() {
+
+    }
+
     private static InputStream readFile(File file) throws IOException {
         InputStream inputStream = new FileInputStream(file);
         while (true) {
@@ -298,42 +289,6 @@ public class HttpUtil {
         }
 
         return inputStream;
-    }
-
-    public static void main(String[] args) throws IOException {
-        // 目标URL地址
-        String targetUrl = "http://10.139.8.245:30088/api/auth/login";
-
-        // 创建连接对象
-        URL url = new URL(targetUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        // 设置请求方法为POST
-        connection.setRequestMethod("POST");
-
-        // 添加请求头信息（如果有需要）
-        connection.addRequestProperty("Content-Type", "application/json");
-
-        // 开始输入流并写入请求体内容
-        OutputStream outputStream = connection.getOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-        writer.write("username=sadmin&password=AHd1@2020"); // 这里的参数根据实际情况修改
-        writer.flush();
-        writer.close();
-        outputStream.close();
-
-        // 获取服务器返回结果
-        InputStream inputStream = connection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
-        }
-        reader.close();
-        inputStream.close();
-
-        System.out.println("Response: " + response.toString());
     }
 }
 
