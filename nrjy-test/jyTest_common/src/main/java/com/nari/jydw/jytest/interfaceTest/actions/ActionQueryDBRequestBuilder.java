@@ -26,8 +26,8 @@ public interface ActionQueryDBRequestBuilder extends ActionParameterBuilder<Acti
 
     /**
      * This parameter is must for the action, if it is null, cannot query anything from DB.
-     * @param expectedField Expected key and value in DB.
+     * @param expectedKey and expectedValue means expected key and value in DB.
      * @return
      */
-    ActionQueryDBRequestBuilder expectedField(Map<String, Object> expectedField);
+    ActionQueryDBRequestBuilder expectedResult(String expectedKey, Object expectedValue);
 }

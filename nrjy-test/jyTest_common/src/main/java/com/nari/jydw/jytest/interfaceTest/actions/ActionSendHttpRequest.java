@@ -2,6 +2,7 @@ package com.nari.jydw.jytest.interfaceTest.actions;
 
 import com.nari.jydw.jytest.common.HttpResponse;
 import com.nari.jydw.jytest.common.HttpStatusEnum;
+import com.nari.jydw.jytest.common.TestParametersUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.LogUtil;
@@ -22,7 +23,7 @@ public class ActionSendHttpRequest extends AbstractTestAction {
     private HttpResponse httpResponse;
     private HttpStatusEnum expectedStatusCode;
     private Object expectedBodyObject;
-    private Map<String, Object> expectedField = new HashMap<>();
+    private Map<String, Object> expectedResult = new HashMap<>();
 
     @Override
     protected void prepareParameters() {
@@ -33,6 +34,8 @@ public class ActionSendHttpRequest extends AbstractTestAction {
         if (this.paramRequestBody != null) {
             paramBody = JsonUtil.getGson().toJson(this.paramRequestBody);
         }
+
+        paramRequestUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + paramRequestUrl;
     }
 
     @Override
@@ -66,12 +69,29 @@ public class ActionSendHttpRequest extends AbstractTestAction {
     protected void verify() {
         Assert.assertEquals(httpResponse.getStatusCode(), this.expectedStatusCode.getCode());
 
-        expectedField.forEach((key, value) -> {
+        expectedResult.forEach((key, value) -> {
             try {
                 verifyHttpResponseBodyUtil.getInstance().verifyField(expectedBodyObject, httpResponse.getResponseBody(), key, value);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 Assert.fail("ActionSendHttpRequest::Verify http response fail. Reason = " + e.getMessage());
             }
         });
+    }
+
+    private void getApiActionType() {
+        try {
+            // 获取枚举的Class对象
+            Class<?> enumClass = Class.forName("InterfaceEnum$api");
+
+            // 使用反射获取所有枚举值
+            Object[] enumConstants = enumClass.getEnumConstants();
+
+            // 遍历并打印枚举值
+            for (Object enumConst : enumConstants) {
+                System.out.println(enumConst.toString());
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

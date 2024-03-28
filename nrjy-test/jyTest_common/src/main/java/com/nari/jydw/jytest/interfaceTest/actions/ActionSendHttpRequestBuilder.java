@@ -3,8 +3,6 @@ package com.nari.jydw.jytest.interfaceTest.actions;
 import com.nari.jydw.jytest.common.HttpStatusEnum;
 import org.apache.commons.httpclient.Header;
 
-import java.util.Map;
-
 public interface ActionSendHttpRequestBuilder extends ActionParameterBuilder<ActionSendHttpRequest> {
 
     /**
@@ -49,9 +47,9 @@ public interface ActionSendHttpRequestBuilder extends ActionParameterBuilder<Act
     ActionSendHttpRequestBuilder expectedBodyObject(Object expectedBodyObject);
 
     /**
-     * This parameter is must for the action, if it is null, it will send null to server.
-     * @param expectedField which the api will be post to.
+     * This parameter is must for the action, it cannot be empty.
+     * @param expectedKey and expectedValue what the api response content verify point.
      * @return
      */
-    ActionSendHttpRequestBuilder expectedField(Map<String, Object> expectedField);
+    ActionSendHttpRequestBuilder expectedResult(String expectedKey, Object expectedValue);
 }

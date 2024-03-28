@@ -7,7 +7,7 @@ public abstract class AbstractTestAction {
     protected abstract void prepareParameters();
     protected abstract void sendRequest();
     protected abstract void verify();
-    protected Map<String,Object> actionResult = new HashMap<String,Object>();
+    protected Map<String, Object> actionResult = new HashMap<String,Object>();
 
     public void perform() {
         prepareParameters();

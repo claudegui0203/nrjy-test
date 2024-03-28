@@ -16,4 +16,5 @@ public class register {
     private String company = "";
     private String phone = "";
     private String isDisplay = "";
+    private String status = "";
 }

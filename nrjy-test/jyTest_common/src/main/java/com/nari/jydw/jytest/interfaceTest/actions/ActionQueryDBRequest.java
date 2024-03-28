@@ -15,7 +15,7 @@ public class ActionQueryDBRequest extends AbstractTestAction {
     private String paramSql = "";
     private String paramTableName = "";
     private boolean expectedIsResultExist = true;
-    private Map<String, Object> expectedField = new HashMap<>();
+    private Map<String, Object> expectedResult = new HashMap<>();
     private ResultSet resultSet;
 
     @Override
@@ -24,7 +24,7 @@ public class ActionQueryDBRequest extends AbstractTestAction {
             Assert.fail("ActionQueryDBRequest: Parameters paramSql and paramTableName cannot be empty at same time!!!");
         }
 
-        if (expectedField == null) {
+        if (expectedResult == null) {
             Assert.fail("ActionQueryDBRequest: Parameters expectedField cannot be null!!!");
         }
 
@@ -41,7 +41,7 @@ public class ActionQueryDBRequest extends AbstractTestAction {
 
     @Override
     protected void verify() {
-        LogUtil.info("verify: Excepted result = " + expectedField.toString());
+        LogUtil.info("verify: Excepted result = " + expectedResult.toString());
 
         try {
             if (expectedIsResultExist) {
@@ -80,7 +80,7 @@ public class ActionQueryDBRequest extends AbstractTestAction {
     private AtomicReference<String> generateQuerySql() {
         AtomicBoolean isFirst = new AtomicBoolean(true);
         AtomicReference<String> sql = new AtomicReference<>("SELECT * FROM " + paramTableName + " WHERE ");
-        expectedField.forEach((key, value) -> {
+        expectedResult.forEach((key, value) -> {
             sql.set(mergeQuerySql(sql.get(), key, value, isFirst.get()));
 
             if (isFirst.get())
@@ -108,7 +108,7 @@ public class ActionQueryDBRequest extends AbstractTestAction {
     }
 
     private boolean isMapContained(Map<String, Object> queryResult) {
-        for (Map.Entry<String, Object> entry : expectedField.entrySet()) {
+        for (Map.Entry<String, Object> entry : expectedResult.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
 

@@ -21,13 +21,9 @@ public class updateUser extends CommonTestCases {
         update update = new update();
         update.setId(0L);
 
-
-
-        verifyActionResult.put("code", 200);
-
         ActionSendHttpRequest actionSendHttpRequest = ActionBuilder.createActionParameterBuilder(ActionParameterBuilderMap4Http.ACTION_SEND_HTTP_REQUEST)
                 .paramRequestUrl(testUrl).paramHttpProtocol(ActionHttpEnum.POST).paramRequestHeader(generateHeaders()).paramRequestBody(update)
-                .expectedStatusCode(HttpStatusEnum.OK).expectedBodyObject(new responseBody()).expectedField(verifyActionResult)
+                .expectedStatusCode(HttpStatusEnum.OK).expectedResult("code", 200).expectedBodyObject(new responseBody())
                 .buildAction();
         actionSendHttpRequest.perform();
 
