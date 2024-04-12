@@ -4,7 +4,7 @@ import com.nari.jydw.jytest.common.HttpResponse;
 import com.nari.jydw.jytest.common.MainTestCases;
 import com.nari.jydw.jytest.common.TestParametersUtil;
 import com.nari.jydw.jytest.common.InterfaceEnum;
-import com.nari.jydw.jytest.common.business.body.loginResponse;
+import com.nari.jydw.jytest.common.business.response.LoginResponse;
 import com.nari.jydw.jytest.interfaceTest.actions.ActionHttpEnum;
 import com.nari.jydw.jytest.interfaceTest.utils.*;
 import org.apache.commons.httpclient.Header;
@@ -34,7 +34,7 @@ public class CommonTestCases extends MainTestCases {
     }
 
     @BeforeClass
-    public void getToken() {
+    public void getTokenByLogin() {
         String tokenUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.LOGIN.getApi() + "?username=" + TestParametersUtil.getInstance().getTestParameters().getSiteUsername() + "&password=" + TestParametersUtil.getInstance().getTestParameters().getSitePassword();
         Header header = new Header("Content-Type", "application/json");
         HttpResponse httpResponse = null;
@@ -45,7 +45,7 @@ public class CommonTestCases extends MainTestCases {
         }
 
         for (int i = 0; i < 3; i++) {
-            token = JsonUtil.getGson().fromJson(httpResponse.getResponseBody(), loginResponse.class).getToken();
+            token = JsonUtil.getGson().fromJson(httpResponse.getResponseBody(), LoginResponse.class).getToken();
             if ((httpResponse.getStatusCode() == 200) && (! token.isEmpty())) {
                 LogUtil.info("CommonTestCases::getToken: url = " + tokenUrl + ", response code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody() + ", token = " + token);
                 return;
@@ -89,5 +89,9 @@ public class CommonTestCases extends MainTestCases {
             LogUtil.error("teardown::Release DB connection fail. message = " + e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    public String getToken() {
+        return this.token;
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class update {
+public class Update {
     private Long id = 0L;
     private String realName = "";
     private String password = "";

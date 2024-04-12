@@ -1,6 +1,5 @@
 package com.nari.jydw.jytest.common;
 
-import com.nari.jydw.jytest.interfaceTest.actions.ActionHttpEnum;
 import lombok.Getter;
 
 @Getter
@@ -12,6 +11,12 @@ public enum InterfaceEnum {
     DELETEUPLOAD("/api/sample/sampleView/deleteUpload"),
     REGISTER("/api/user/register"),
     UPDATEUSER("/api/user/update"),
+    CHECKUSERNAME("/api/user/checkName"),
+    QUERYUSER("/api/user/list"),
+    UPDATEUSERINFO("/api/user/update"),
+    CHECKUSERPASSWD("/api/user/checkPwd"),
+    UPDATEPASSWORD("/api/user/upPwd"),
+    RESETPASSWORD("/api/user/resetPwd"),
     DELETEUSER("/api/user/del");
 
     private InterfaceEnum(String api) {

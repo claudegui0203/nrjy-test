@@ -3,7 +3,7 @@
     <parameter name="LOCAL_CONFIG_FILE" value="TAConfiguration.conf"/>
     <test verbose="2" name="Sample Management">
         <classes>
-            <class name="com.nari.jydw.jytest.interfacetest.samplemanagement.sampleListTest"/>
+            <class name="com.nari.jydw.jytest.interfacetest.samplemanagement.CaseSampleList"/>
         </classes>
     </test>
     <listeners>

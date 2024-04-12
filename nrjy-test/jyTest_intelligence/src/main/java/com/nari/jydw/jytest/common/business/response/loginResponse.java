@@ -1,21 +1,14 @@
-package com.nari.jydw.jytest.common.business.body;
+package com.nari.jydw.jytest.common.business.response;
 
-
-import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class loginResponse {
+public class LoginResponse extends ResponseBody {
     private int code = 0;
     private String msg = "";
-    private data data;
-
-    @Override
-    public String toString() {
-        return JsonUtil.getGson().toJson(this);
-    }
+    private LoginData data;
 
     public String getToken() {
         return data.getToken();
@@ -24,8 +17,8 @@ public class loginResponse {
 
 @Setter
 @Getter
-class data {
-    userInfo userInfo;
+class LoginData {
+    UserInfo userInfo;
     String token = "";
     String type = "";
     String roleName = "";
@@ -35,7 +28,7 @@ class data {
 
 @Setter
 @Getter
-class userInfo {
+class UserInfo {
     int id = 0;
     String username = "";
 }

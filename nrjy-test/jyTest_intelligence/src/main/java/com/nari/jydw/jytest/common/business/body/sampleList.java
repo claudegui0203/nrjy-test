@@ -8,7 +8,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class sampleList {
+public class SampleList {
     private Integer sysType = 1;
     private Integer pageNum = 1;
     private Integer pageSize = 3;

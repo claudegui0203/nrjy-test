@@ -7,7 +7,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class register {
+public class Register {
     private String realName = "";
     private String password = "";
     private String username = "";

@@ -1,18 +1,14 @@
 package com.nari.jydw.jytest.performance;
 
-import com.nari.jydw.jytest.CommonTestCases;
-import com.nari.jydw.jytest.common.business.body.AlertPic;
+import com.nari.jydw.jytest.common.TestParametersUtil;
 import com.nari.jydw.jytest.interfaceTest.helps.MqttHelp;
 import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
-import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.LogUtil;
-import com.nari.jydw.jytest.common.TestParametersUtil;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -20,13 +16,14 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class multiThreadsUploadPictures extends CommonTestCases {
-    private Integer count = 3000;
-    private Integer threadsCount = 3;
-    private final File file = new File("D:\\performance\\00133f11fd324292bb576bd2c51c0963.JPG");
+public class MultiThreadMinio {
+    private Integer count = 20032;
+    private Integer threadsCount = 64;
+    private final File file = new File("performance/00133f11fd324292bb576bd2c51c0963.JPG");
 
     @Test
     public void uploadOneThousandPicturesOneByOne() throws IOException, InterruptedException, ExecutionException {
+        String url = "http://10.139.102.60:18021/file/v2/upload_file?token=WebToken:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbnRpbWUiOiIyMDI0LTAzLTI5IDA5OjE2OjIyIiwiZXhwIjoxNzExNzYxMzgyLCJ1c2VySWQiOiIxIn0._BtIWG-rc-9Cl5Azr88dgKzSEyhpyHrx8OWOZIQttGQ";
         List<HashSet<File>> pictures = generatePictures();
         checkPictures(pictures);
 
@@ -39,48 +36,38 @@ public class multiThreadsUploadPictures extends CommonTestCases {
         for (int i = 0; i < threadsCount; i++) {
             int finalI = i;
             Future<Void> future = executorService.submit(() -> {
-                String url = "http://10.139.200.69:10013/api/uploadImage";
-                MqttClient mqttClient = generateMqttClient(finalI);
-                subscribe(mqttClient, 0, "jydw/topic/upload_pic");
+                int pictureNo = 0;
                 for (File picture : pictures.get(finalI)) {
-                    String picPath = "upload_pic/220kV/2024/02/04/20240204_143912_/profile_jydw_upload/capturepicpath/2024-02-04/" + picture.getName();
                     Map<String, String> parameters = new HashMap<String, String>();
-                    parameters.put("picPath", picPath);
+                    parameters.put("id", String.valueOf((finalI * (count/threadsCount) + pictureNo)));
+                    parameters.put("module", "performance-0329");
+                    parameters.put("fileName", picture.getName());
+                    parameters.put("leftBottom", String.valueOf(System.nanoTime()));
+                    parameters.put("scaled", String.valueOf(false));
 
-                    CloseableHttpResponse response = null;
+                    CloseableHttpResponse response;
                     LogUtil.info("Thread ID = " + finalI + ", begin to upload picture. Picture name = " + picture.getName());
                     try {
                         response = HttpUtil.postUploadFile(url, picture, parameters, null);
                         LogUtil.info("status code = " + response.getStatusLine().getStatusCode() + ", body = " + EntityUtils.toString(response.getEntity(), "UTF-8"));
                         if (response.getStatusLine().getStatusCode() != 200) {
                             LogUtil.error("Upload picture fail. And response = " + response.getStatusLine().getStatusCode());
-                        } else {
-                            LogUtil.info("Begin to sent MQTT message. picture name = " + picture.getName());
-
-                            AlertPic alertPic = new AlertPic();
-                            alertPic.setFile_path(picPath);
-                            sendMessage(mqttClient, 0 , "jydw/topic/upload_pic", JsonUtil.getGson().toJson(alertPic));
                         }
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        LogUtil.error("Upload picture fail. And response = " + e.getMessage());
                     }
+
+                    pictureNo++;
                 }
 
                 LogUtil.info("Thread " + finalI + " end testing.");
-
-                try {
-                    TimeUnit.SECONDS.sleep(15);
-                    mqttClient.disconnect();
-                    mqttClient.close();
-                } catch (InterruptedException | MqttException e) {
-                    throw new RuntimeException(e);
-                }
 
                 return null;
             });
             futures.add(future);
         }
 
+        TimeUnit.SECONDS.sleep(1200);
         int i = 0;
         while (true) {
             boolean allThreadsComplete = true;
@@ -96,7 +83,7 @@ public class multiThreadsUploadPictures extends CommonTestCases {
                 break;
             }
 
-            TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(60);
         }
 
         long endTime = System.nanoTime();
@@ -128,7 +115,6 @@ public class multiThreadsUploadPictures extends CommonTestCases {
                     picturesSubCollection.add(picture);
                 } catch (IOException ee) {
                     LogUtil.error("generatePictures:: Generate picture fail. reason = " + ee.getMessage());
-                    throw new RuntimeException(ee);
                 } finally {
                     if (inputStream != null) {
                         try {
@@ -150,7 +136,7 @@ public class multiThreadsUploadPictures extends CommonTestCases {
 
         while (true) {
             String pictureName = "1" + String.valueOf(rand.nextInt(8)) + String.valueOf(rand.nextInt(1000000000)) + String.valueOf(rand.nextInt(100000000));
-            File picture = new File("D:\\performance\\" + pictureName + ".JPG");
+            File picture = new File("performance/" + pictureName + ".JPG");
 
             if (! picture.exists()) {
                 return picture;
@@ -209,27 +195,5 @@ public class multiThreadsUploadPictures extends CommonTestCases {
         mqttConnectOptions.setKeepAliveInterval(60);
         mqttConnectOptions.setCleanSession(true);
         return mqttConnectOptions;
-    }
-
-    private void subscribe(MqttClient mqttClient, Integer qos, String topic) {
-        try {
-            mqttClient.subscribe(topic, qos);
-        }catch (MqttException e){
-            LogUtil.error("subscribe::Subscribe message fail. Reason = " + e.getMessage());
-            reconnectMqtt(mqttClient);
-        }
-    }
-
-    private void sendMessage(MqttClient mqttClient, Integer qos, String topic, String message) {
-        MqttMessage mqttMsg = new MqttMessage(message.getBytes());
-        mqttMsg.setQos(qos);
-        mqttMsg.setRetained(false);
-
-        try {
-            mqttClient.publish(topic, mqttMsg);
-        } catch (MqttException e) {
-            LogUtil.error("sendMessage::Send MQTT message fail. Reason = " + e.getMessage());
-            reconnectMqtt(mqttClient);
-        }
     }
 }

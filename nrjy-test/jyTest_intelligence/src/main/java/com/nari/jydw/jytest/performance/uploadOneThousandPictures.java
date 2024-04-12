@@ -1,7 +1,7 @@
 package com.nari.jydw.jytest.performance;
 
 import com.nari.jydw.jytest.CommonTestCases;
-import com.nari.jydw.jytest.common.business.body.alertPic;
+import com.nari.jydw.jytest.common.business.body.AlertPic;
 import com.nari.jydw.jytest.interfaceTest.utils.HttpUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.JsonUtil;
 import com.nari.jydw.jytest.interfaceTest.utils.LogUtil;
@@ -64,7 +64,7 @@ public class uploadOneThousandPictures extends CommonTestCases {
             if (response.getStatusLine().getStatusCode() == 200) {
 //                uploadPic uploadPic = new uploadPic();
 //                uploadPic.setFile_path(picPath);
-                alertPic alertPic = new alertPic();
+                AlertPic alertPic = new AlertPic();
                 alertPic.setFile_path(picPath);
                 LogUtil.info("body = " + JsonUtil.getGson().toJson(alertPic));
                 MqttUtil.getInstance().sendMessage(0, "jydw/topic/upload_pic", JsonUtil.getGson().toJson(alertPic));

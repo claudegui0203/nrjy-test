@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class sampleLibraryBd {
+public class SampleLibraryBd {
     private Integer pageSize = 0;
     private Integer pageNum = 0;
     private String sceneLabelId = "";

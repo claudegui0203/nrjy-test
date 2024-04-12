@@ -8,6 +8,6 @@ import java.util.List;
 
 @Setter
 @Getter
-public class del {
+public class Del {
     private List<Long> ids = new ArrayList<>();
 }

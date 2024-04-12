@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class deleteUpload {
+public class DeleteUpload {
     private Integer sysType = 0;
     private String uploadId = "";
 }

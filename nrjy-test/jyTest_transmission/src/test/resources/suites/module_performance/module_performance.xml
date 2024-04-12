@@ -3,7 +3,7 @@
     <parameter name="LOCAL_CONFIG_FILE" value="TAConfiguration.conf"/>
     <test verbose="2" name="Upload pictures">
         <classes>
-            <class name="com.nari.jydw.jytest.performance.MultiThreadInterface"/>
+            <class name="com.nari.jydw.jytest.performance.MultiThreadMinio"/>
         </classes>
     </test>
     <listeners>

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class deleteSampleMain {
+public class DeleteSampleMain {
     private Integer sysType;
     private List<String> sampleIdList = new ArrayList<>();
 }

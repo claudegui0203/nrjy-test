@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 @Setter
 @Getter
-public class uploadPic {
+public class UploadPic {
     private String file_path = "upload_pic/220kV金家岭变电站/2023/12/11/20231211_143912_/profile_jydw_upload/capturepicpath/2023-12-11/00133f11fd324292bb576bd2c51c0963.jpg";
     private String station_code = "12M00000013840987";
     private String pic_height = "1080";
@@ -20,7 +20,7 @@ public class uploadPic {
     private String time = "";
     private String pic_width = "1920";
 
-    public uploadPic() {
+    public UploadPic() {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         time = currentTime.format(formatter);

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class alertPic {
+public class AlertPic {
     private String area_name = "交流35kV";
     private String file_path = "pic_alarm/220kV古圣变电站/2024/02/03/20240203_164835_待用线353_待用线3534隔离开关ABC相_基座/profile_jydw_upload/capturepicpath/2024-02-03/1f5ab95ed9954726ae43c4fc284da021.jpg";
     private String appearance_type = "";
@@ -38,7 +38,7 @@ public class alertPic {
     private String pic_width = "1920";
     private String device_pos = "13";
 
-    public alertPic() {
+    public AlertPic() {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         time = currentTime.format(formatter);
