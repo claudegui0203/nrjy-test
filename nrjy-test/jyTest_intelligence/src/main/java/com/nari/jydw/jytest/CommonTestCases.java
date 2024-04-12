@@ -7,6 +7,8 @@ import com.nari.jydw.jytest.common.InterfaceEnum;
 import com.nari.jydw.jytest.common.business.response.LoginResponse;
 import com.nari.jydw.jytest.interfaceTest.actions.ActionHttpEnum;
 import com.nari.jydw.jytest.interfaceTest.utils.*;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.apache.commons.httpclient.Header;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.testng.Assert;
@@ -18,6 +20,8 @@ import org.testng.annotations.Parameters;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.Matchers.is;
 
 public class CommonTestCases extends MainTestCases {
     private String token = "";
@@ -35,26 +39,25 @@ public class CommonTestCases extends MainTestCases {
 
     @BeforeClass
     public void getTokenByLogin() {
-        String tokenUrl = TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.LOGIN.getApi() + "?username=" + TestParametersUtil.getInstance().getTestParameters().getSiteUsername() + "&password=" + TestParametersUtil.getInstance().getTestParameters().getSitePassword();
-        Header header = new Header("Content-Type", "application/json");
-        HttpResponse httpResponse = null;
-        try {
-            httpResponse = HttpUtil.sendHttpRequest(ActionHttpEnum.POST, tokenUrl, "", new Header[] { header });
-        } catch (IOException e) {
-            LogUtil.error("getToken: Send delete request fail. Reason = " + e.getMessage());
-        }
-
         for (int i = 0; i < 3; i++) {
-            token = JsonUtil.getGson().fromJson(httpResponse.getResponseBody(), LoginResponse.class).getToken();
-            if ((httpResponse.getStatusCode() == 200) && (! token.isEmpty())) {
-                LogUtil.info("CommonTestCases::getToken: url = " + tokenUrl + ", response code = " + httpResponse.getStatusCode() + ", body = " + httpResponse.getResponseBody() + ", token = " + token);
-                return;
-            }
+            Response response = RestAssured.
+                    given().log().all()
+                        .header("Content-Type", "application/json; charset=utf-8")
+                        .queryParam("username", TestParametersUtil.getInstance().getTestParameters().getSiteUsername())
+                        .queryParam("password", TestParametersUtil.getInstance().getTestParameters().getSitePassword())
+                    .when()
+                        .post(TestParametersUtil.getInstance().getTestParameters().getSiteUrl() + InterfaceEnum.LOGIN.getApi())
+                    .then()
+                        .statusCode(200)
+                        .body("code", is(200))
+                        .body("msg", is("登录成功"))
+                        .extract().response();
 
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                LogUtil.error("CommonTestCases::getToken: sleep error!");
+            token = response.jsonPath().get("data.token");
+            LogUtil.info("getToken: Token = " + token);
+
+            if (! this.token.isEmpty()) {
+                return;
             }
         }
     }
